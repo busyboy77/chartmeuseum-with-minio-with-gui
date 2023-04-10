@@ -3,23 +3,15 @@ version: '2'
 services:
   gui:
 #    image: moreillon/chartmuseum-gui:latest
+# https://github.com/maximemoreillon/chartmuseum-gui/issues/1
     image: moreillon/chartmuseum-gui:3786d02d
     environment:
       PUBLIC_CHARTMUSEUM_URL: http://charter:8080
       PATH_BASE: "/gui"
-    ports:
-      - 3000:3000
+#    ports:
+#      - 3000:3000
     networks:
       - charter
-  ui:
-    image: idobry/chartmuseumui:latest
-    environment:
-      CHART_MUSEUM_URL: "http://charter:8080"
-#   ports:
-#    - 80:8080
-    networks:
-      - charter
-
   nginx:
     image: bitnami/nginx:1.23
     ports:
@@ -37,9 +29,9 @@ services:
       - '9001:9001'
     environment:
        - BITNAMI_DEBUG=true
-       - MINIO_ROOT_USER=expertflow
-       - MINIO_ROOT_PASSWORD=expertflow123
-       - MINIO_DEFAULT_BUCKETS=expertflow
+       - MINIO_ROOT_USER=dummy
+       - MINIO_ROOT_PASSWORD=dummy123
+       - MINIO_DEFAULT_BUCKETS=dummy
        - MINIO_SCHEME=https
 #       - MINIO_SKIP_CLIENT=yes
     volumes:
@@ -56,56 +48,16 @@ services:
      - PORT=8080  
      - DEBUG=1
      - STORAGE=amazon
-     - STORAGE_AMAZON_BUCKET=expertflow
+     - STORAGE_AMAZON_BUCKET=dummy
      - STORAGE_AMAZON_PREFIX=""
      - STORAGE_AMAZON_REGION=us-east-1
      - STORAGE_AMAZON_ENDPOINT=minio:9000
-     - AWS_ACCESS_KEY_ID=expertflow
-     - AWS_SECRET_ACCESS_KEY=expertflow123
+     - AWS_ACCESS_KEY_ID=dummy
+     - AWS_SECRET_ACCESS_KEY=dummy123
      - AWS_INSECURE_SKIP_VERIFY=true
     networks:
       - charter
 
-
-
-####  chartmuseum:
-####     image: docker.io/bitnami/chartmuseum:latest
-####     environment:
-####       - PORT=8080
-####       - DEBUG=1
-####       - STORAGE=amazon
-####       - STORAGE_AMAZON_BUCKET=expertflow
-####       - STORAGE_AMAZON_REGION="us-east-1"
-####       - STORAGE_AMAZON_ENDPOINT=minio:9000
-####       - AWS_ACCESS_KEY_ID=expertflow
-####       - AWS_SECRET_ACCESS_KEY=expertflow123
-####       - AWS_INSECURE_SKIP_VERIFY=true
-####       - BASIC_AUTH_USER=admin
-####       - BASIC_AUTH_PASS=expert123
-####       - AUTH_ANONYMOUS_GET=1
-####     ports:
-####       - '8080:8080'
-####     networks:
-####       - charter
-####
-
-####  chartmuseum:
-####     image: docker.io/bitnami/chartmuseum:latest
-####     environment:
-####      - PORT=8080
-####      - DEBUG=1
-####      - STORAGE=local
-####      - DISABLE_API=false
-####      - BASIC_AUTH_USER=admin
-####      - BASIC_AUTH_PASS=expert123
-####      - AUTH_ANONYMOUS_GET=1
-####     volumes:
-####      - charts:/bitnami/data
-####     ports:
-####      - '8080:8080'
-####     networks:
-####      - charter
-####
 volumes:
   minio_data:
     driver: local
